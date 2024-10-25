@@ -36,9 +36,11 @@ body {
 
 .logo {
     position: absolute;
-    width: 100%;
-    top: 0;
-
+    width: 100%;   /* Cover the entire width of the wheel */
+    height: 100%;  /* Cover the entire height of the wheel */
+    top: 0;        /* Align with the top */
+    left: 0;       /* Align with the left */
+    z-index: 3;    /* Make sure it appears above the wheel */
 }
 
 #buttons {
