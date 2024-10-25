@@ -1,0 +1,108 @@
+/* Styles goes here */
+@font-face {
+    font-family: 'norwestor'; /* The name you want to use for the font */
+    src: url('./fonts/norwester.otf') format('opentype'); /* Specify the path to your font and format */
+    font-style: normal;
+    font-weight: bold;
+}
+
+body {
+    background-image: url('./images/background.png');
+    background-size: cover; /* Ensures the image covers the entire background */
+    background-position: center; /* Centers the image */
+    font-family: norwestor, sans-serif;
+}
+
+#app {
+    width: 400px;
+    height: 400px;
+    margin: auto;
+    position: relative;
+    top: 120px;
+}
+
+.marker {
+    position: absolute;
+    width: 60px;
+    left: 172px;
+    top: -20px;
+    z-index: 2;
+}
+
+.wheel {
+    width: 100%;
+    height: 100%
+}
+
+.logo {
+    position: absolute;
+    width: 100%;
+    top: 0;
+
+}
+
+#buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.button {
+    display: block;
+    width: 200px;
+    margin: auto;
+    cursor: pointer;
+    text-align: center;
+}
+
+.button:hover{
+    opacity: 0.8;
+}
+
+.disabled {
+    opacity: 0.5; /* Dimmed appearance */
+    pointer-events: none; /* Disable interactions */
+}
+
+.blur {
+    animation: blur 10s;
+}
+
+@keyframes blur {
+    0% {
+        filter: blur(1.5px)
+    }
+    80% {
+        filter: blur(1.5px)
+    }
+    100% {
+        filter: blur(0px);
+    }
+}
+
+#betAmount {
+    width: 100%;
+    padding: 10px;
+    margin: 10px auto;
+    font-size: 16px;
+}
+
+#betDisplay {
+    top: 20px;
+    font-size: 18px;
+    margin: 0 auto;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+}
+
+#winningsDisplay {
+    top: 20px;
+    font-size: 18px;
+    margin: 0 auto;
+    font-weight: bold;
+    position: relative;
+    color: white;
+    text-align: center;
+}

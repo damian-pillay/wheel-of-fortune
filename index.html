@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Weiben - Wheel of fortune</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+  </head>
+
+  <body>
+    <div id="app">
+        <img class="marker" src="./images/marker.png" />
+        <img class="wheel" src="./images/wheel.png" />
+        <img class="logo" src="./images/logo.png" />
+        
+        <input type="range" id="betAmount" min="0" max="5000" value="1" step="10" />
+        <div id="betDisplay">Bet Amount: R<span id="betValue">0</span></div>
+
+        <div id="buttons">
+            <img class="button" src="./images/button.png" />
+            <img class="button" src="./images/withdraw.png">
+        </div>
+            
+        <div id="winningsDisplay">Balance: R5000</div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
