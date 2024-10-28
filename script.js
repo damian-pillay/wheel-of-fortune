@@ -1,50 +1,50 @@
 (function() {
-    // Select necessary DOM elements
-    const wheel = document.querySelector('.wheel'); 
-    const startButton = document.querySelector('.button'); 
+    // select necessary DOM elements
+    const wheel = document.querySelector('.wheel');
+    const startButton = document.querySelector('.button');
     const withdrawButton = document.querySelectorAll('.button')[1];
-    const logo = document.querySelector('.logo'); 
-    const tickSound = new Audio('./audio/tick.wav'); 
+    const logo = document.querySelector('.logo');
+    const tickSound = new Audio('./audio/tick.wav');
 
-    // Initialize variables
-    let deg = 0; 
+    // initialize variables
+    let deg = 0;
     let currentRotation = 0;
-    let previousTick = 0; 
-    let isSpinning = false; 
-    let winnings = 5000; 
-    let betAmount; 
+    let previousTick = 0;
+    let isSpinning = false;
+    let winnings = 5000;
+    let betAmount;
 
-    // Define multipliers for each segment of the wheel
+    // define multipliers for each segment of the wheel
     const multipliers = [2, 0, 1, 0, 5, 0, 1, 0, 2, 0, 10, 0, 2, 0, 1, 0, 5, 0, 1, 0];
     const segmentSize = 360 / multipliers.length;
 
-    // Select input and display elements for bet amount and winnings
+    // select input and display elements for bet amount and winnings
     const betAmountInput = document.getElementById('betAmount');
     const betValueDisplay = document.getElementById('betValue');
     const winningsDisplay = document.getElementById('winningsDisplay');
 
-    // Disable withdraw button initially
+    // disable withdraw button initially
     withdrawButton.classList.add('disabled');
     withdrawButton.style.pointerEvents = 'none';
 
-    // Disable start button initially
+    // disable start button initially
     startButton.classList.add('disabled');
     startButton.style.pointerEvents = 'none';
     
-    // Event listener for bet amount input
+    // event listener for bet amount input
     betAmountInput.addEventListener('input', () => {
         const betValue = parseInt(betAmountInput.value, 10);
     
-        // Ensure betValue is a valid number
+        // check if betValue is a valid number
         if (!isNaN(betValue) && betValue > 0) {
-            betValueDisplay.textContent = betValue; 
-            betAmount = betValue; 
+            betValueDisplay.textContent = betValue;
+            betAmount = betValue;
         } else {
             betValueDisplay.textContent = 0;
             betAmount = 0;
         }
     
-        // Enable/disable start button based on bet amount
+        // enable/disable start button based on bet amount
         if (betAmount === 0) {
             startButton.style.pointerEvents = 'none';
             startButton.classList.add('disabled');
@@ -53,81 +53,74 @@
             startButton.classList.remove('disabled');
         }
     
-        // Ensure bet does not exceed winnings
+        // make sure bet doesn't exceed winnings
         if (betAmount > winnings) {
             betValueDisplay.textContent = winnings;
-            betAmount = winnings; 
+            betAmount = winnings;
         }
     });
 
-    // Event listener for start button click
+    // event listener for start button click
     startButton.addEventListener('click', () => {
-        // Deduct bet amount from winnings if the input is enabled
+        
+        // deduct bet amount from winnings if input is enabled
         if (!betAmountInput.disabled && !isNaN(betAmount)) {
-            winnings -= betAmount; 
-            winningsDisplay.innerText = `Balance: R${winnings}`; 
+            winnings -= betAmount;
+            winningsDisplay.innerText = `Balance: R${winnings}`;
         }
 
         betAmountInput.disabled = true;
-
-        // Trigger sound permission with a play/pause toggle
-        tickSound.play().then(() => {
-            tickSound.pause(); // stop it right after to only play on tick
-            tickSound.currentTime = 0; // reset to start for next tick
-        }).catch(error => {
-            console.error("Audio error:", error);
-        });
         
-        // Disable buttons while spinning
+        // disable buttons while spinning
         withdrawButton.style.pointerEvents = 'none';
         withdrawButton.classList.add('disabled');
         startButton.style.pointerEvents = 'none';
         startButton.classList.add('disabled');
 
-        // Generate random rotation degree for the wheel
+        // set random rotation degree for the wheel
         deg = Math.floor(5000 + Math.random() * 5000);
-        wheel.style.transition = 'all 5s ease-out'; // Set transition for spinning
-        wheel.style.transform = `rotate(${deg}deg)`; // Rotate wheel
+        wheel.style.transition = 'all 5s ease-out';
+        wheel.style.transform = `rotate(${deg}deg)`;
         
-        // Apply blur effect to wheel and logo during spin
+        // apply blur effect to wheel and logo during spin
         wheel.classList.add('blur');
         logo.classList.add('blur');
 
-        // Reset rotation values
+        // reset rotation values
         currentRotation = 0;
         previousTick = 0;
         isSpinning = true;
 
-        // Start ticking sound animation
+        // start ticking sound animation
         requestAnimationFrame(spinTick);
     });
 
-    // Event listener for when the wheel spin transition ends
+    // event listener for wheel spin end
     wheel.addEventListener('transitionend', () => {
-        // Remove blur effects after spinning
+        // remove blur effects after spinning
         wheel.classList.remove('blur');
         logo.classList.remove('blur');
 
-        // Enable buttons after spin ends
+        // enable buttons after spin ends
         startButton.style.pointerEvents = 'auto';
         startButton.classList.remove('disabled');
         withdrawButton.style.pointerEvents = 'auto';
         withdrawButton.classList.remove('disabled');
 
-        wheel.style.transition = 'none'; 
+        wheel.style.transition = 'none';
         
-        const actualDeg = deg % 360; 
-        wheel.style.transform = `rotate(${actualDeg}deg)`; // Set final position of the wheel
+        const actualDeg = deg % 360;
+        wheel.style.transform = `rotate(${actualDeg}deg)`;
 
-        isSpinning = false; // Set spinning flag to false
+        isSpinning = false;
         
-        // Determine which segment the wheel landed on
+        // find which segment the wheel landed on
         const segmentIndex = Math.floor((actualDeg + 8.2) / segmentSize);
-        const multiplier = multipliers[segmentIndex]; 
+        const multiplier = multipliers[segmentIndex];
         betAmount = betAmount * multiplier;
         betValueDisplay.textContent = betAmount;
 
-        // Enable bet input if bet amount is zero
+        // enable bet input if bet amount is zero
         if (betAmount === 0) {
             betAmountInput.disabled = false;
             withdrawButton.classList.add('disabled');
@@ -140,9 +133,9 @@
         }
     });
 
-    // Function to handle the ticking sound during spin
+    // function for ticking sound during spin
     function spinTick() {
-        if (!isSpinning) return; 
+        if (!isSpinning) return;
 
         const computedStyle = window.getComputedStyle(wheel);
         const transform = computedStyle.getPropertyValue('transform');
@@ -151,13 +144,13 @@
             const values = transform.split('(')[1].split(')')[0].split(',');
             const a = values[0];
             const b = values[1];
-            const angle = Math.round(Math.atan2(b, a) * (180 / Math.PI)); // Calculate angle of rotation
-            currentRotation = angle >= 0 ? angle : 360 + angle; // Normalize angle
+            const angle = Math.round(Math.atan2(b, a) * (180 / Math.PI));
+            currentRotation = angle >= 0 ? angle : 360 + angle;
 
-            // Play ticking sound based on rotation
+            // play ticking sound based on rotation
             if (currentRotation - previousTick >= 100 || currentRotation < previousTick) {
-                tickSound.currentTime = 0; 
-                tickSound.play(); 
+                tickSound.currentTime = 0;
+                tickSound.play();
                 previousTick = currentRotation;
             }
         }
@@ -165,16 +158,16 @@
         requestAnimationFrame(spinTick);
     }
 
-    // Event listener for withdraw button click
+    // event listener for withdraw button click
     withdrawButton.addEventListener('click', () => {
-        winnings += betAmount; 
-        winningsDisplay.innerText = `Balance: R${winnings}`; 
-        betAmountInput.value = 0; 
-        betValueDisplay.innerText = 0; 
-        betAmountInput.disabled = false; 
-        betAmount = 0; 
+        winnings += betAmount;
+        winningsDisplay.innerText = `Balance: R${winnings}`;
+        betAmountInput.value = 0;
+        betValueDisplay.innerText = 0;
+        betAmountInput.disabled = false;
+        betAmount = 0;
 
-        // Disable buttons after withdrawal
+        // disable buttons after withdrawl
         withdrawButton.style.pointerEvents = 'none';
         withdrawButton.classList.add('disabled');
         startButton.style.pointerEvents = 'none';
